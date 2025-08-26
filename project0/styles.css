@@ -1,0 +1,88 @@
+/* Reset some default margins */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* Container for the whole page */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+    height: 100vh;           /* full viewport height */
+    text-align: center;
+}
+
+.top-right {
+    align-self: flex-end;
+    margin-bottom: 10px;
+}
+
+.top-right > a {
+    margin-right: 10px;
+}
+
+.center {
+    margin: auto;
+    width: 100%;
+}
+
+/* Header/logo */
+header {
+    font-size: 50px;
+    font-weight: bold;
+    margin-bottom: 40px; /* space below the header */
+}
+
+form {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Search bar styling */
+.search-box {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    max-width: 600px;       /* limit width */
+    margin-bottom: 20px;
+}
+
+.search-box input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-box input[type="text"]:hover {
+    background-color: #f1f1f1;
+}
+
+/* Buttons container */
+.buttons {
+    display: flex;
+    gap: 15px; /* space between buttons */
+    justify-content: center;
+}
+
+.buttons button[type="submit"] {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.buttons button[type="submit"]:hover {
+    background-color: #f1f1f1;
+}

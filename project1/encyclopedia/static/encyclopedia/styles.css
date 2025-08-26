@@ -1,0 +1,139 @@
+body {
+    margin: 0;
+    background-color: white;
+}
+
+code {
+    white-space: pre;
+}
+
+h1 {
+    margin-top: 0px;
+    padding-top: 20px;
+}
+
+textarea {
+    height: 90vh;
+    width: 80%;
+}
+
+.row {
+    justify-content: flex-start;
+}
+
+.main {
+    padding: 10px;
+}
+
+.search {
+    width: 100%;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.form-control {
+    font-size: 12px;
+}
+
+.sidebar {
+    background-color: #f0f0f0;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-top: 5px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100vh;
+    padding: 20px;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 20px;
+    margin-left: 20px;
+    max-width: 700px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header h1 {
+    justify-self: left;
+    align-self: end;
+    font-size: 30px;
+    padding-bottom: 20px;
+    max-width: 700px;
+    width: 100%;
+    margin-right: 300px;
+}
+
+.header a {
+    justify-self: right;
+    align-self: center;
+    margin-right: 20px;
+}
+
+.container div {
+    margin-bottom: 10px;
+}
+
+.input-text {
+    width: 100%;
+    max-width: 700px;
+}
+
+.input-text > label {
+    margin-right: 10px;
+}
+
+.input-text > input[type="text"] {
+    width: 100%;
+    padding-left: 10px;
+}
+
+.textarea {
+    max-height: 500px;
+    max-width: 700px;
+    height: 50%;
+    width: 100%;
+}
+
+.textarea > textarea {
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    width: 100%;
+}
+
+.buttons > input[type="submit"] {
+    margin: 0 auto;
+    font-size: 20px;    
+    padding: 2px 40px;
+}
+
+.e_top {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 700px;;
+}
+
+.e_bottom {
+    height: 100%;
+    width: 100%;
+}
+
+.page_container > .content {
+    margin-left: 20px;
+}

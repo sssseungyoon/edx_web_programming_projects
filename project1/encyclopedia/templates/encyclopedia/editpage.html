@@ -1,0 +1,43 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit a Page
+{% endblock %}
+
+{% block body %}
+<div class="header">
+    <h1>Edit a Page</h1>
+</div>
+
+<div class="container">
+    <form class="e_top" action="{% url 'edit_page' %}" method="get">
+        <div class="input-text">
+            <label for="titles">Choose a title:</label>
+            <select name="title" id="titles">
+                {% for entry in entries %}
+                    <option value="{{ entry }}" {% if entry == request.GET.title %} selected {% endif %}>{{ entry }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="e_top_button">
+            <input type="submit" value="Get the body content">
+        </div>
+    </form>
+
+    <form class="e_bottom" action="{% url 'edit_page' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="title" value="{{ title }}">
+        <div class="textarea">
+            <textarea name="body" placeholder="Enter the content here...">{{ body }}</textarea>
+        </div>
+        <div class="buttons">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
+</div>
+
+
+
+
+{% endblock %}

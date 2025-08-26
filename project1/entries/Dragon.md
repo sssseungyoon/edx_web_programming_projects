@@ -1,0 +1,1 @@
+It is a magical legendary creature.

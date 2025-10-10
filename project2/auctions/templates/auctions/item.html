@@ -1,0 +1,83 @@
+{% extends 'auctions/layout.html'%}
+
+{% block head_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const viewer = document.querySelector("#viewer");
+      const prevBtn = document.querySelector("#prev");
+      const nextBtn = document.querySelector("#next");
+
+        // Select all <img> inside the UL
+        const imgs = document.querySelectorAll("#images li");
+
+        // Convert NodeList → Array and grab src
+        const images = Array.from(imgs).map(li => li.textContent.trim());
+
+      let index = 0;
+
+      function showImage() {
+        viewer.src = images[index];
+      }
+
+      prevBtn.onclick = function () {
+        index = (index - 1 + images.length) % images.length;
+        showImage();
+      };
+
+      nextBtn.onclick = function () {
+        index = (index + 1) % images.length;
+        showImage();
+      };
+
+      showImage();
+    });
+  </script>
+{% endblock %}
+
+{% block body %}
+    <ul id="images" style="display: none;">
+        {% for picture in item.pictures.all %}
+            <li> {{picture.image.url}} </li>
+        {% endfor %}
+    </ul>
+
+    <div class="item_page_container">
+        <h1 style="font-size: 30px; font-weight: bold;">{{ item.name }} </h1>
+        <div class="picture_div">
+            <button id="prev">⟨ Prev</button>
+            <img id="viewer" src="" alt="Gallery" width="400">
+            <button id="next">Next ⟩</button>
+        </div>
+        <p>
+            {{item.description }}
+        </p>
+        <div class="current_price">
+            Current bid: {{item.price}}
+        </div>
+        <div class="bids_info">
+            {{ item.bids.all|length }} bid(s) so far. {% if item.bids.last.user == user %} Your bid is the current bid. {% endif %}
+        </div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}", style="color: red; font-weight: bold; ">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="bid_div">
+            <form action="{% url 'item' item.id %}", method="post">
+                {% csrf_token %}
+                <input type="text", name="bid_price", placeholder="Bid Price">
+                <input type="submit", value="Place bid">
+            </form>
+        </div>
+        <div class="details_div">
+            <h2>Details: </h2>
+            <ul>
+                <li>listed by {{item.user}} </li>
+                <li>Category: {{item.category}} </li>
+                <li>Condition: {{item.condition}} </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

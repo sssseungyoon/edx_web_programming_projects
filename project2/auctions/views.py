@@ -74,16 +74,15 @@ def item(request, item_id):
         })
     elif request.method == "POST":
         item = Auction_Item.objects.get(pk=item_id)
-        price = item.price
-        bid_price =  int(request.POST["bid_price"])
+        bids = Auction_Item.objects.get("bids")
+        price = bids[-1] 
+        bid_price =  float(request.POST["bid_price"])
         if request.user.is_authenticated:
-            if bid_price <= price:
+            if bid_price <= price or item.date_of_bid_closure:
                 messages.error(request,"The bid price has to be higher than the current bid price.")
                 return HttpResponseRedirect(reverse('item', args=(item_id,)))
             else:
-                item.price = bid_price
-                item.save()
-                new_bid = Bids(price = price, item = item, user = request.user)
+                new_bid = Bids.objects.create(price=bid_price, item = item,user = request.user)
                 new_bid.save()
                 return HttpResponseRedirect(reverse('item', args=(item_id,)))
         else: 

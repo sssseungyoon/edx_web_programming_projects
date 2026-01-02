@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import User, Email
 
 
-def index(request):
+def index(request, path = None):
 
     # Authenticated users view their inbox
     if request.user.is_authenticated:

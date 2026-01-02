@@ -8,3 +8,11 @@ textarea {
     margin-bottom: 10px;
     border: 2px solid black;
 }
+
+.highlight {
+    color:darkgray;
+}
+
+.read {
+    background-color:rgb(236, 235, 235);
+}

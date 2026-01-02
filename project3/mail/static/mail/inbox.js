@@ -1,24 +1,52 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-
   // have to add the popstate logic as this is a single-page application
   window.onpopstate = function(event) {
-    getSection(event.state.section);
+    handleLocationChange();
   }
-  function getSection(section) {
-    const url  = section.split('/');
-    if (url[0] !== None) {
-      switch (url[0]){
-        case "inbox":
-          pass;
-      }
+  function handleLocationChange() {
+    const path = window.location.pathname;
+    if (path === '/inbox') {
+      load_mailbox('inbox');
     }
+    else if (path === '/compose') {
+      compose_email();
+    }
+    else if (path === '/sent') {
+      load_mailbox('sent');
+    }
+    else if (path === '/archived') {
+      load_mailbox('archive');
+    }
+    else if (path.split('/').length > 2) {
+      const emailId = path.split('/')[2];
+      // loadmail logic
+      fetch(`/emails/${emailId}`)
+      .then(response => response.json())
+      .then(email => {
+        console.log(email);
+        load_mail(email, document.querySelector('#emails-view'));
+      })
+    }
+    
   }
   // Use buttons to toggle between views
-  document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-  document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-  document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#inbox').addEventListener('click', () => {
+    load_mailbox('inbox');
+    history.pushState({},'','/inbox');
+  })
+  document.querySelector('#sent').addEventListener('click', () => {
+    load_mailbox('sent');
+    history.pushState({},'','/sent');
+  });
+  document.querySelector('#archived').addEventListener('click', () => {
+    load_mailbox('archive');
+    history.pushState({},'','/archive');
+  });
+  document.querySelector('#compose').addEventListener('click', () => {
+    compose_email();
+    history.pushState({},'','/compose');
+  });
   // Submit button when sending emails
   document.querySelector('#compose-form').addEventListener('submit', function(event){
     event.preventDefault();
@@ -60,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
   })
   // By default, load the inbox
   load_mailbox('inbox');
+  history.pushState({},'','/inbox');
 });
 
 function reset_fields() {
@@ -82,15 +111,19 @@ function compose_email() {
 
 
 function load_mail(email, mailview){
-  console.log('clicked!');
+  // first clear the main div that displays mails
+  mailview.style.display = 'block';
   mailview.innerHTML = '';
+  // in case you are accessing the page through popstating, you have to clear the view
+  document.querySelector('#compose-view').style.display = 'none';
+  
   const div = document.createElement('div');
   div.style.display = 'block';
 
   function mail_specific_format(container, email, name){
+    // logic to add archived button in the mail view
     if(name === 'archived') {
       const archived = email[name];
-      console.log(archived);
   
       const button = document.createElement('button');
       button.id = 'archive';
@@ -109,12 +142,12 @@ function load_mail(email, mailview){
       }
       container.append(button); 
     }
+    // all the other text-based elements added through this 
     else {
       const div = document.createElement('div');
       div.id = name;
       div.innerHTML = `${name}: ${email[name]}`;
       container.append(div);
-      console.log(`${name} done`);
     }
   }
   mail_specific_format(div, email, 'sender');
@@ -124,11 +157,25 @@ function load_mail(email, mailview){
   mail_specific_format(div, email, 'timestamp');
   mail_specific_format(div, email, 'archived');
   
+  // update the read property of the mail
+  fetch(`/emails/${email.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+  })
+  })
+  .then(mailview.append(div));
 
-  mailview.append(div);
+  console.log(mailview.innerHTML);
 
+  // push-state logic
+  if(window.location.pathname.split('/').length < 3) {
+    const new_path = window.location.pathname + `/${email.id}`;
+    history.pushState({},'',new_path);
+  }
   
 }
+
 
 
 function load_mailbox(mailbox) {
@@ -165,18 +212,21 @@ function load_mailbox(mailbox) {
       // set id and classname
       div.id = `${email.id}`;
       div.className = 'email';
+      if (email.read === true)  {
+        div.classList.add("read");
+        console.log(`email read ${email.read}!`);
+      }
+      
 
       // highlight the div box when the cursor hovers
       div.addEventListener('mouseenter', () => {
-        div.style.backgroundColor = 'yellow';
-        div.style.borderColor = 'red';
+        div.classList.add("highlight");
       })
       // load the mail view once the div is clicked
       div.addEventListener('click', () => load_mail(email, mailview));
       // unhighlight the div box when the cursor laves
       div.addEventListener('mouseleave', () => {
-        div.style.backgroundColor = 'white';
-        div.style.borderColor = 'black';
+        div.classList.remove("highlight");
       })
 
       
